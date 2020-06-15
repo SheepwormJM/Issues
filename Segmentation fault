@@ -1,0 +1,107 @@
+# Worked last week, not this week. 
+# Either it fails to find the command, or it returns segmentation fault.
+
+# Home directory: 
+/export/home/jmi45g
+
+# Last week installed anaconda3 and then IntaRNAv3.2.0 into /anaconda3/bin
+
+# Sitting in home directory, on bash-3.2
+cd anaconda3/bin
+
+IntaRNA --version
+# -bash: IntaRNA: command not found
+
+./IntaRNA --version
+# Segmentation fault
+
+more IntaRNA
+
+# ******** IntaRNA: Not a text file ********
+
+### Tried sitting in a directory I'd made called intaRNA, and running IntaRNA from there (as had done last week):
+
+cd  ../../intaRNA
+/export/home/jmi45g/anaconda3/bin/IntaRNA -t test_mRNA.fa -q test.fa --outMode=C --out Jenni_awesome_mir9551_targetsites_b.csv
+# Segmentation fault
+
+
+### Tried running the script remotely:
+
+# Made a script:
+
+#!/bin/sh
+#PBS -l walltime=50:00:00
+#PBS -l cput=50:00:00
+#PBS -l nodes=1:centos6
+/export/home/jmi45g/anaconda3/bin/IntaRNA -t test_mRNA.fa -q test.fa --outMode=C --out Jenni_awesome_mir9551_targetsites_b.csv
+
+qsub ./run_test_intarna
+
+# Fails:
+
+-bash-3.2$ more run_test_intarna.*
+::::::::::::::
+run_test_intarna.e435786
+::::::::::::::
+/var/spool/torque/mom_priv/jobs/435786.headnode03.cent.gla.ac.uk.SC: line 5: 15120 Segmentation fault      /export/home/jmi45g/anaconda3/bin/IntaRNA -t test_mRNA.fa -q
+test.fa --outMode=C --out Jenni_awesome_mir9551_targetsites_b.csv
+::::::::::::::
+run_test_intarna.o435786
+::::::::::::::
+Prologue Args:
+Job ID: 435786.headnode03.cent.gla.ac.uk
+User ID: jmi45g
+Group ID: jmi45g
+MAchine: node072.hpc.gla.ac.uk
+
+Epilogue Args:
+Job ID: 435786.headnode03.cent.gla.ac.uk
+User ID: jmi45g
+Group ID: jmi45g
+Job Name: run_test_intarna
+Session ID: 15096
+Resource List: cput=50:00:00,neednodes=1:centos6,nodes=1:centos6,walltime=50:00:00
+Resources Used: cput=00:00:00,mem=0kb,vmem=0kb,walltime=00:00:00
+Queue Name: long
+Account String:
+
+
+No user epilogue file found at /export/home/jmi45g/epilogue
+
+
+Process's killed on node072.hpc.gla.ac.uk
+tmp directory removed on node072.hpc.gla.ac.uk
+
+
+
+### Tried starting an interactive job on centos06 and re-doing the commands in case I had been doing this last week:
+
+qsub -I -l nodes=1:centos6,walltime=24:00:00
+# qsub: waiting for job 435791.headnode03.cent.gla.ac.uk to start
+# qsub: job 435791.headnode03.cent.gla.ac.uk ready
+#
+# Prologue Args:
+# Job ID: 435791.headnode03.cent.gla.ac.uk
+# User ID: jmi45g
+# Group ID: jmi45g
+# MAchine: node072.hpc.gla.ac.uk
+
+# Now in bash-4.1:
+export PATH=/export/home/jmi45g/anaconda3/bin:$PATH
+export PATH=/export/home/jmi45g/anaconda3/bin/python:$PATH
+conda info
+
+# Returned info about conda. All fine.
+# Sitting in home directory:
+IntaRNA --version
+# Segmentation fault
+
+cd anaconda3/bin
+IntaRNA --version
+# Segmentation fault
+
+
+
+
+
